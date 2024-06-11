@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { nanoid } from '@reduxjs/toolkit'
 
 import { addPost } from './postsSlice'
 
@@ -13,7 +12,6 @@ export default function AddPostForm() {
   const handleSaveBtnClick = () => {
     dispatch(
       addPost({
-        id: nanoid(),
         title,
         content,
       }),

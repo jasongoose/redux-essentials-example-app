@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, nanoid } from '@reduxjs/toolkit'
 
 const initialState = [
   { id: '1', title: 'First Post!', content: 'Hello!' },
@@ -9,8 +9,22 @@ const postsSlice = createSlice({
   name: 'posts',
   initialState,
   reducers: {
-    addPost(state, { payload }) {
-      state.push(payload)
+    addPost: {
+      reducer(state, { payload }) {
+        state.push(payload)
+      },
+      prepare({ title, content }) {
+        // action 객체를 생성함
+        return {
+          payload: {
+            id: nanoid(),
+            title,
+            content,
+          },
+          // meta
+          // error
+        }
+      },
     },
     updatePost(state, { payload }) {
       const { id, title, content } = payload
@@ -32,3 +46,5 @@ export default postsSlice.reducer
 
 // slice 당 하나의 reducer가 정의되어 store에 등록됨
 // createSlice 내부의 reducers는 action별 처리방식을 구분함
+
+// prepare 콜백을 사용하여 dispatch하면서 실제 action payload의 모양새를 강제할 필요가 없어지고 중복을 줄일 수 있음
