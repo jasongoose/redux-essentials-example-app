@@ -1,8 +1,8 @@
 import { createSlice, nanoid } from '@reduxjs/toolkit'
 
 const initialState = [
-  { id: '1', title: 'First Post!', content: 'Hello!' },
-  { id: '2', title: 'Second Post', content: 'More text' },
+  { id: '1', title: 'First Post!', content: 'Hello!', user: '100' },
+  { id: '2', title: 'Second Post', content: 'More text', user: '101' },
 ]
 
 const postsSlice = createSlice({
@@ -12,14 +12,16 @@ const postsSlice = createSlice({
     addPost: {
       reducer(state, { payload }) {
         state.push(payload)
+        //
       },
-      prepare({ title, content }) {
+      prepare({ title, content, userId }) {
         // action 객체를 생성함
         return {
           payload: {
             id: nanoid(),
             title,
             content,
+            user: userId,
           },
           // meta
           // error
