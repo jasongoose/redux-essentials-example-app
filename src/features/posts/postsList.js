@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 
 import PostAuthor from './PostAuthor'
 import TimeAgo from './TimeAgo'
+import ReactionButtons from './ReactionButtons'
 
 export default function PostsList() {
   const posts = useSelector((state) => state.posts)
@@ -20,6 +21,8 @@ export default function PostsList() {
       <p className="post-content">{post.content.substring(0, 100)}</p>
       <PostAuthor userId={post.user} />
       <TimeAgo timeStamp={post.date} />
+      <br />
+      <ReactionButtons post={post} />
       <br />
       <Link to={`/posts/${post.id}`} className="button muted-button">
         View Post

@@ -1,6 +1,14 @@
 import { createSlice, nanoid } from '@reduxjs/toolkit'
 import { sub } from 'date-fns'
 
+const initialReactions = () => ({
+  thumbsUp: 0,
+  hooray: 0,
+  heart: 0,
+  rocket: 0,
+  eyes: 0,
+})
+
 const initialState = [
   {
     id: '1',
@@ -10,6 +18,7 @@ const initialState = [
     date: sub(new Date(), {
       minutes: 10,
     }).toISOString(),
+    reactions: initialReactions(),
   },
   {
     id: '2',
@@ -19,6 +28,7 @@ const initialState = [
     date: sub(new Date(), {
       minutes: 5,
     }).toISOString(),
+    reactions: initialReactions(),
   },
 ]
 
@@ -40,6 +50,7 @@ const postsSlice = createSlice({
             content,
             user: userId,
             date: new Date().toISOString(),
+            reactions: initialReactions(),
           },
           // meta
           // error
@@ -55,10 +66,18 @@ const postsSlice = createSlice({
       target.title = title
       target.content = content
     },
+    addReaction(state, { payload }) {
+      const { postId, reaction } = payload
+      const targetPost = state.find((post) => post.id === postId)
+      if (!targetPost) {
+        return
+      }
+      targetPost.reactions[reaction]++
+    },
   },
 })
 
-export const { addPost, updatePost } = postsSlice.actions
+export const { addPost, updatePost, addReaction } = postsSlice.actions
 
 export default postsSlice.reducer
 
