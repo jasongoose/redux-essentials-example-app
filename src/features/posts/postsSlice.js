@@ -2,7 +2,7 @@ import { createSlice, nanoid, createAsyncThunk } from '@reduxjs/toolkit'
 
 import { client } from '../../api/client'
 
-export const getAllPostsThunk = createAsyncThunk(
+export const fetchPostsThunk = createAsyncThunk(
   'posts/fetchPosts',
   async () => {
     const response = await client.get('/fakeApi/posts')
@@ -10,6 +10,7 @@ export const getAllPostsThunk = createAsyncThunk(
   },
 )
 
+// createAsyncThunk에서 반환된 함수는 thunk (function)이 아닌 thunk (action) creator
 // thunk를 dispatch하면 비동기 로직 이후 thunk의 type을 prefix로 가지는 action이 dispatch됨
 
 const postsSlice = createSlice({
@@ -58,6 +59,22 @@ const postsSlice = createSlice({
       }
       targetPost.reactions[reaction]++
     },
+  },
+  // 현재 slice에서 다루지 않는 action들을 처리하는 reducer들을 별도로 정의
+  // 보통 thunk에서 dispatch된 비동기 작업 상태 action도 다룸
+  extraReducers(builder) {
+    builder
+      .addCase(fetchPostsThunk.pending, (state, action) => {
+        state.status = 'pending'
+      })
+      .addCase(fetchPostsThunk.fulfilled, (state, { payload }) => {
+        state.status = 'fulfilled'
+        state.posts = state.posts.concat(payload)
+      })
+      .addCase(fetchPostsThunk.rejected, (state, { error }) => {
+        state.status = 'rejected'
+        state.error = error.message
+      })
   },
 })
 
