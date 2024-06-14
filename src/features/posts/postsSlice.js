@@ -69,7 +69,8 @@ const postsSlice = createSlice({
       })
       .addCase(fetchPostsThunk.fulfilled, (state, { payload }) => {
         state.status = 'fulfilled'
-        state.posts = state.posts.concat(payload)
+        // state.posts = state.posts.concat(payload)
+        state.posts = payload
       })
       .addCase(fetchPostsThunk.rejected, (state, { error }) => {
         state.status = 'rejected'
