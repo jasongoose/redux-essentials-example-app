@@ -87,3 +87,8 @@ export default postsSlice.reducer
 // createSlice 내부의 reducers는 action별 처리방식을 구분함
 
 // prepare 콜백을 사용하여 dispatch하면서 실제 action payload의 모양새를 강제할 필요가 없어지고 중복을 줄일 수 있음
+
+export const selectAllPosts = (state) => state.posts
+
+export const selectPostById = (id) => (state) =>
+  state.posts.find((post) => post.id === id)

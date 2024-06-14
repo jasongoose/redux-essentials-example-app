@@ -6,12 +6,10 @@ import PostAuthor from './PostAuthor'
 import TimeAgo from './TimeAgo'
 import ReactionButtons from './ReactionButtons'
 
-export default function PostsList() {
-  const posts = useSelector((state) => state.posts)
+import { selectAllPosts } from './postsSlice'
 
-  // const orderedPosts = posts
-  //   .slice()
-  //   .sort((a, b) => b.date.localeCompare(a.date))
+export default function PostsList() {
+  const posts = useSelector(selectAllPosts)
 
   const orderedPosts = posts.slice().reverse()
 
