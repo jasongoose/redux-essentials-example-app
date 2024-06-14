@@ -1,36 +1,16 @@
-import { createSlice, nanoid } from '@reduxjs/toolkit'
-// import { sub } from 'date-fns'
+import { createSlice, nanoid, createAsyncThunk } from '@reduxjs/toolkit'
 
-// const initialReactions = () => ({
-//   thumbsUp: 0,
-//   hooray: 0,
-//   heart: 0,
-//   rocket: 0,
-//   eyes: 0,
-// })
+import { client } from '../../api/client'
 
-// const initialState = [
-//   {
-//     id: '1',
-//     title: 'First Post!',
-//     content: 'Hello!',
-//     user: '100',
-//     date: sub(new Date(), {
-//       minutes: 10,
-//     }).toISOString(),
-//     reactions: initialReactions(),
-//   },
-//   {
-//     id: '2',
-//     title: 'Second Post',
-//     content: 'More text',
-//     user: '101',
-//     date: sub(new Date(), {
-//       minutes: 5,
-//     }).toISOString(),
-//     reactions: initialReactions(),
-//   },
-// ]
+export const getAllPostsThunk = createAsyncThunk(
+  'posts/fetchPosts',
+  async () => {
+    const response = await client.get('/fakeApi/posts')
+    return response.data
+  },
+)
+
+// thunk를 dispatch하면 비동기 로직 이후 thunk의 type을 prefix로 가지는 action이 dispatch됨
 
 const postsSlice = createSlice({
   name: 'posts',
