@@ -1,44 +1,48 @@
 import { createSlice, nanoid } from '@reduxjs/toolkit'
-import { sub } from 'date-fns'
+// import { sub } from 'date-fns'
 
-const initialReactions = () => ({
-  thumbsUp: 0,
-  hooray: 0,
-  heart: 0,
-  rocket: 0,
-  eyes: 0,
-})
+// const initialReactions = () => ({
+//   thumbsUp: 0,
+//   hooray: 0,
+//   heart: 0,
+//   rocket: 0,
+//   eyes: 0,
+// })
 
-const initialState = [
-  {
-    id: '1',
-    title: 'First Post!',
-    content: 'Hello!',
-    user: '100',
-    date: sub(new Date(), {
-      minutes: 10,
-    }).toISOString(),
-    reactions: initialReactions(),
-  },
-  {
-    id: '2',
-    title: 'Second Post',
-    content: 'More text',
-    user: '101',
-    date: sub(new Date(), {
-      minutes: 5,
-    }).toISOString(),
-    reactions: initialReactions(),
-  },
-]
+// const initialState = [
+//   {
+//     id: '1',
+//     title: 'First Post!',
+//     content: 'Hello!',
+//     user: '100',
+//     date: sub(new Date(), {
+//       minutes: 10,
+//     }).toISOString(),
+//     reactions: initialReactions(),
+//   },
+//   {
+//     id: '2',
+//     title: 'Second Post',
+//     content: 'More text',
+//     user: '101',
+//     date: sub(new Date(), {
+//       minutes: 5,
+//     }).toISOString(),
+//     reactions: initialReactions(),
+//   },
+// ]
 
 const postsSlice = createSlice({
   name: 'posts',
-  initialState,
+  initialState: {
+    posts: [],
+    status: 'idle',
+    error: null,
+  },
   reducers: {
     addPost: {
       reducer(state, { payload }) {
-        state.push(payload)
+        state.posts.push(payload)
         //
       },
       prepare({ title, content, userId }) {
@@ -59,16 +63,16 @@ const postsSlice = createSlice({
     },
     updatePost(state, { payload }) {
       const { id, title, content } = payload
-      const target = state.find((item) => item.id === id)
+      const targetPost = state.posts.find((item) => item.id === id)
       if (!target) {
         return
       }
-      target.title = title
-      target.content = content
+      targetPost.title = title
+      targetPost.content = content
     },
     addReaction(state, { payload }) {
       const { postId, reaction } = payload
-      const targetPost = state.find((post) => post.id === postId)
+      const targetPost = state.posts.find((post) => post.id === postId)
       if (!targetPost) {
         return
       }
@@ -88,7 +92,7 @@ export default postsSlice.reducer
 
 // prepare 콜백을 사용하여 dispatch하면서 실제 action payload의 모양새를 강제할 필요가 없어지고 중복을 줄일 수 있음
 
-export const selectAllPosts = (state) => state.posts
+export const selectAllPosts = (state) => state.posts.posts
 
 export const selectPostById = (id) => (state) =>
-  state.posts.find((post) => post.id === id)
+  state.posts.posts.find((post) => post.id === id)
